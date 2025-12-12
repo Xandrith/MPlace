@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MPlace</title>
+    <link rel="icon" type="image/png" href="icon.png" sizes="32x32">
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+</head>
+<body>
+
+    <div id="loading-screen">
+        <div class="loader-content">
+            <h1>Cargando...</h1>
+            <div id="loading-bar"><div id="loading-progress"></div></div>
+        </div>
+    </div>
+
+    <div id="auth-screen" style="display:none;">
+        <div class="auth-box">
+            <h1>MPlace</h1>
+            <p>Modified by Xandrith v.1.0.6</p>
+            <input type="text" id="authUser" class="mc-input" placeholder="Usuario" maxlength="12">
+            <input type="password" id="authPass" class="mc-input" placeholder="Contraseña">
+            <div class="auth-buttons">
+                <button id="btnLogin" class="mc-btn success">ENTRAR</button>
+                <button id="btnRegister" class="mc-btn info">REGISTRO</button>
+            </div>
+            <p id="authMsg" class="error-msg"></p>
+        </div>
+    </div>
+
+    <div id="game-container" style="display:none;">
+        
+        <div id="viewport">
+            <div id="world-content">
+                <canvas id="gameCanvas"></canvas>
+                <div id="players-layer"></div>
+                <div id="local-player" class="player local">
+                    <div class="player-label" id="local-player-label">Tu</div>
+                </div>
+            </div>
+            
+            <div id="overlay-controls">
+                <div class="coords-box">X: <span id="cx">0</span> Y: <span id="cy">0</span></div>
+                <div id="active-tool-display">Herramienta: Pincel</div>
+
+                <button id="btnToggleMode" class="circle-btn" onclick="toggleMobileMoveMode()" title="Mover/Pintar">✋</button>
+                <button id="btnZoomIn" class="circle-btn" onclick="setZoom(camera.scale + 0.5)" title="Acercar">+</button>
+                <button id="btnZoomOut" class="circle-btn" onclick="setZoom(camera.scale - 0.5)" title="Alejar">-</button>
+            </div>
+        </div>
+
+        <div id="sidebar">
+            <h3 class="title">CUENTA</h3>
+            <div class="control-group">
+                <div class="info-row"><span id="displayUsername" style="color:lime">...</span></div>
+                <button id="btnLogout" class="mc-btn danger small">Salir</button>
+            </div>
+            
+            <h3 class="title">MUNDOS</h3>
+            <div class="control-group">
+                <label>Servidor:</label>
+                <select id="serverSelect" class="mc-input" onchange="changeServer(this.value)">
+                    <option value="world_01">Mundo 1</option>
+                    <option value="world_02">Mundo 2</option>
+                    <option value="world_03">Mundo 3</option>
+                </select>
+            </div>
+
+            <h3 class="title">HERRAMIENTAS</h3>
+            <div id="toolbar" class="tool-grid">
+                <button class="tool-btn selected" onclick="selectTool('brush', 1)" title="Pincel 1x1">🖌️</button>
+                
+                <button class="tool-btn" onclick="selectTool('line', 1)" title="Línea Recta">📏</button>
+                <button class="tool-btn" onclick="selectTool('spray', 5)" title="Aerosol">🚿</button>
+                <button class="tool-btn" onclick="selectTool('eraser', 1)" title="Goma">🧽</button>
+                <button class="tool-btn" onclick="selectTool('picker', 1)" title="Pipeta">🧪</button>
+                <button class="tool-btn" onclick="selectTool('move', 0)" title="Mover Mapa">✋</button>
+            </div>
+            <h3 class="title">VISTA</h3>
+            <div class="control-group">
+                <button class="mc-btn half" id="btnCenter">Punto central</button>
+                <button class="mc-btn half" id="btnScreenshot">Capturar</button>
+                <button class="mc-btn half" id="btnToggleGrid">Mostrar grid</button>
+                <button class="mc-btn half" id="btnTogglePlayers">Ocultar jugadores</button>
+            </div>
+
+            <h3 class="title">CHAT</h3>
+            <div id="chat-container">
+                <div id="chat-history"></div>
+                <input id="chat-input" placeholder="Mensaje..." autocomplete="off">
+            </div>
+        </div>
+    </div>
+
+    <div id="floating-picker">
+        <div id="picker-handle">
+            <h3 class="title">BLOQUES</h3>
+        </div>
+        <div id="picker-content">
+            <div id="picker"></div> 
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
